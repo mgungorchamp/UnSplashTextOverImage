@@ -160,5 +160,19 @@ def add_text_with_shadow(image_path, text, font_size=30, text_color=(255, 255, 2
     print("Image saved to" + file_output_path)
 
 
-long_text = "Peace"
+def read_text_from_file(file_path, encodings=['utf-8', 'iso-8859-9', 'latin-1', 'cp1254']):
+    for encoding in encodings:
+        try:
+            with open(file_path, 'r', encoding=encoding) as file:
+                text = file.read()
+            return text
+        except UnicodeDecodeError:
+            continue
+    raise ValueError("Unable to decode the file using any of the specified encodings.")
+
+
+
+content_file_path = "content.txt"
+long_text = read_text_from_file(content_file_path)
+print(long_text)
 add_text_with_shadow(file_path, long_text, font_size=80, text_color=(255, 255, 255), shadow_color=(0, 0, 0), shadow_offset=(2, 2), margin=55)
