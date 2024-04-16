@@ -76,8 +76,8 @@ def add_text_to_image(image_path, text, font_size=30, text_color=(255, 255, 255)
     print("Text added to image and saved as output.jpg")
 
 # URL of the image to download
-url = "https://source.unsplash.com/random/1920x1080/?wallpaper,landscape,animals,flowers,forest,abstract-wallpaper"
-
+#url = "https://source.unsplash.com/random/1920x1080/?wallpaper,landscape,animals,flowers,forest,abstract-wallpaper"
+url = "https://source.unsplash.com/random/1920x1080/?computer,software"
 
 # File path where you want to save the downloaded image
 number = random_4_digit_number()
