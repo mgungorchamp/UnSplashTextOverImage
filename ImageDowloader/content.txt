@@ -1,4 +1,1 @@
-Copy and paste is a design error.
-	
-	
-David Parnas
+Incorrect documentation is often worse than no documentation. Bertrand Meyer

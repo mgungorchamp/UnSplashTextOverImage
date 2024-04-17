@@ -77,13 +77,28 @@ def add_text_to_image(image_path, text, font_size=30, text_color=(255, 255, 255)
 
 # URL of the image to download
 #url = "https://source.unsplash.com/random/1920x1080/?wallpaper,landscape,animals,flowers,forest,abstract-wallpaper"
-url = "https://source.unsplash.com/random/1920x1080/?computer,software"
+#url = "https://source.unsplash.com/random/1920x1080/?computer,software"
+
+url = "https://source.unsplash.com/random/1920x1080/?wallpaper,landscape,animals,flowers,forest,abstract-wallpaper,computer,software"
+
+# Define the relative path
+relative_path = "output/"
+import os
+# Create the folder structure if it doesn't exist
+if not os.path.exists(relative_path):
+    os.makedirs(relative_path)
+
 
 # File path where you want to save the downloaded image
 number = random_4_digit_number()
-file_path = "image_"+ number +".jpg"  # You can specify any file path and name here
-file_output_path = "image_"+ number +"_text.jpg"
-# Download the image
+image_name_org = "image_"+ number +".jpg"  # You can specify any file path and name here
+image_with_text = "image_"+ number +"_text.jpg"
+# Download the image 
+
+# Combine the relative path and file name
+file_path = os.path.join(relative_path, image_name_org)
+file_path_text = os.path.join(relative_path, image_with_text)
+
 download_image(url, file_path)
 
 #add_text_to_image(file_path, "Hello, World!", font_size=50, text_color=(255, 255, 255), margin=100)
@@ -137,7 +152,7 @@ def add_text_with_shadow(image_path, text, font_size=30, text_color=(255, 255, 2
     
     
     # Wrap the text to fit within the maximum line width
-    wrapped_text = textwrap.fill(text, width= (max_text_width // font_size) * 2)
+    wrapped_text = textwrap.fill(text, width=(max_text_width // font_size) * 2.2) #(max_text_width // font_size) * 2)
     
     # Split the wrapped text into multiple lines
     lines = wrapped_text.split('\n')
@@ -156,8 +171,8 @@ def add_text_with_shadow(image_path, text, font_size=30, text_color=(255, 255, 2
         draw.text((x, y), line, fill=text_color, font=font)
         y += textsize(line, font=font)[1]  # Move to the next line
         
-    image.save(file_output_path)
-    print("Image saved to" + file_output_path)
+    image.save(file_path_text)
+    print("Image saved to " + file_path_text)
 
 
 def read_text_from_file(file_path, encodings=['utf-8', 'iso-8859-9', 'latin-1', 'cp1254']):
@@ -175,4 +190,4 @@ def read_text_from_file(file_path, encodings=['utf-8', 'iso-8859-9', 'latin-1', 
 content_file_path = "content.txt"
 long_text = read_text_from_file(content_file_path)
 print(long_text)
-add_text_with_shadow(file_path, long_text, font_size=80, text_color=(255, 255, 255), shadow_color=(0, 0, 0), shadow_offset=(2, 2), margin=55)
+add_text_with_shadow(file_path, long_text, font_size=111, text_color=(255, 255, 255), shadow_color=(0, 0, 0), shadow_offset=(2, 2), margin=33)
