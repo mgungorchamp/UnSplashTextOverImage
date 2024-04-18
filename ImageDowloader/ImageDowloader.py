@@ -4,6 +4,12 @@ import random
 import string
 from PIL import Image, ImageDraw, ImageFont
 
+
+#url = "https://source.unsplash.com/random/1920x1080/?cyber"
+url = "https://source.unsplash.com/random/1920x1080/?wallpaper"
+
+
+
 # Function to fetch a random image URL from Unsplash
 def get_random_image_url(url):
     try:
@@ -78,8 +84,7 @@ def add_text_to_image(image_path, text, font_size=30, text_color=(255, 255, 255)
 # URL of the image to download
 #url = "https://source.unsplash.com/random/1920x1080/?wallpaper,landscape,animals,flowers,forest,abstract-wallpaper"
 #url = "https://source.unsplash.com/random/1920x1080/?computer,software"
-
-url = "https://source.unsplash.com/random/1920x1080/?wallpaper,landscape,animals,flowers,forest,abstract-wallpaper,computer,software"
+#url = "https://source.unsplash.com/random/1920x1080/?wallpaper,landscape,animals,flowers,forest,abstract-wallpaper,computer,software"
 
 # Define the relative path
 relative_path = "output/"
