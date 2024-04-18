@@ -156,7 +156,9 @@ def add_text_with_shadow(image_path, text, font_size=30, text_color=(255, 255, 2
     font = ImageFont.load_default()  # You can also load a specific font using ImageFont.truetype()
     
     # Calculate text size and position
-    font = ImageFont.truetype("arial.ttf", font_size)
+    #font = ImageFont.truetype("arial.ttf", font_size)
+    font = ImageFont.truetype("pala.ttf", font_size)
+    #font = ImageFont.truetype("calibri.ttf", font_size)
     #max_text_width = min(max_line_width, image.width - 2 * margin)
     max_text_width = image.width - 2 * margin
     
@@ -200,4 +202,4 @@ def read_text_from_file(file_path, encodings=['utf-8', 'iso-8859-9', 'latin-1', 
 content_file_path = "content.txt"
 long_text = read_text_from_file(content_file_path)
 print(long_text)
-add_text_with_shadow(file_path, long_text, font_size=111, text_color=(255, 255, 255), shadow_color=(0, 0, 0), shadow_offset=(2, 2), margin=33)
+add_text_with_shadow(file_path, long_text, font_size=111, text_color=(255, 255, 255), shadow_color=(0, 0, 0), shadow_offset=(3, 3), margin=33)
