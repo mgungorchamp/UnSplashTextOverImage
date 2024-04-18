@@ -1,4 +1,9 @@
-﻿from stat import FILE_ATTRIBUTE_NO_SCRUB_DATA
+﻿'''
+pip install requests
+pip install pillow
+'''
+
+from stat import FILE_ATTRIBUTE_NO_SCRUB_DATA
 import requests
 import random
 import string
