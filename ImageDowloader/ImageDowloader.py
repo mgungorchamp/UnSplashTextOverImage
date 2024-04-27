@@ -11,10 +11,11 @@ import string
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 
+
 #url = "https://source.unsplash.com/random/1920x1080/?cyber"
 #url = "https://source.unsplash.com/random/1920x1080/?wallpaper"
 #url = "https://source.unsplash.com/random/1920x1080/?wallpaper,landscape,animals,flowers,forest,abstract-wallpaper"
-url = "https://source.unsplash.com/random/1920x1080/?islam,flowers,forest,abstract-wallpaper"
+url = "https://source.unsplash.com/random/1920x1080/?flowers"
 
 
 # Function to fetch a random image URL from Unsplash
@@ -161,9 +162,9 @@ def add_text_with_shadow_box(image_path, quote, font_size=30, text_color=(255, 2
     font = ImageFont.load_default()  # You can also load a specific font using ImageFont.truetype()
     
     # Calculate text size and position
-    #font = ImageFont.truetype("arial.ttf", font_size)
+    font = ImageFont.truetype("arial.ttf", font_size)
     #font = ImageFont.truetype("pala.ttf", font_size)
-    font = ImageFont.truetype("calibri.ttf", font_size)
+    #font = ImageFont.truetype("calibri.ttf", font_size)
     #font = ImageFont.truetype("verdana.ttf", font_size)
     
     #max_text_width = min(max_line_width, image.width - 2 * margin)
@@ -181,13 +182,22 @@ def add_text_with_shadow_box(image_path, quote, font_size=30, text_color=(255, 2
     lines = quote.split('\n')
     
     # Wrap each line individually
-    wrapped_lines = [textwrap.fill(line,width=(max_text_width // font_size) * 2.2) for line in lines]
+    wrapped_lines = [textwrap.fill(line,width=(max_text_width // font_size) * 2) for line in lines]
 
     # Join wrapped lines back into a single string
     wrapped_text = '\n'.join(wrapped_lines)
     
     # Calculate total text height
     total_text_height = sum(textsize(line, font=font)[1] for line in wrapped_lines)    
+       
+    # Count the number of empty lines
+    num_empty_lines = len([line for line in lines if not line.strip()])
+
+    # Calculate additional height for empty lines
+    empty_lines_height = num_empty_lines * font_size
+
+    # Adjust total text height to include empty lines
+    total_text_height += empty_lines_height
     
     # Calculate text position
     x = (background_image.width - max_text_width) / 2
@@ -272,7 +282,7 @@ add_text_with_shadow_box(file_path, quote, font_size=font_size, text_color=(255,
 #add_text_with_shadow_box(file_path, quote, author, font_size=88, text_color=(0, 0, 0), shadow_color=(255, 255, 255), shadow_offset=(3, 3), margin=33)
 #add_text_with_shadow_box(file_path, quote, author, font_size=88, text_color=(0, 0, 128), shadow_color=(255, 255, 255), shadow_offset=(3, 3), margin=33)
 #orange white
-add_text_with_shadow_box(file_path, quote, font_size=font_size, text_color=(255, 165, 0), shadow_color=(0, 0, 0), shadow_offset=(3, 3), margin=33)
+#add_text_with_shadow_box(file_path, quote, font_size=font_size, text_color=(255, 165, 0), shadow_color=(0, 0, 0), shadow_offset=(3, 3), margin=33)
 
 #Green white
-add_text_with_shadow_box(file_path, quote, font_size=font_size, text_color=(32, 212, 185), shadow_color=(0, 0, 0), shadow_offset=(3, 3), margin=33)
+#add_text_with_shadow_box(file_path, quote, font_size=font_size, text_color=(32, 212, 185), shadow_color=(0, 0, 0), shadow_offset=(3, 3), margin=33)
