@@ -147,7 +147,7 @@ add_text_with_shadow(file_path, "Bir insanın okuyup öğrendikleri ne kadar ço
 
 import textwrap
 
-def add_text_with_shadow_box(image_path, quote, author, font_size=30, text_color=(255, 255, 255), shadow_color=(0, 0, 0), shadow_offset=(2, 2), margin=50, max_line_width=500):
+def add_text_with_shadow_box(image_path, quote, font_size=30, text_color=(255, 255, 255), shadow_color=(0, 0, 0), shadow_offset=(2, 2), margin=50, max_line_width=500):
     # Open the image
     background_image = Image.open(image_path)
     
@@ -171,21 +171,31 @@ def add_text_with_shadow_box(image_path, quote, author, font_size=30, text_color
     
     
     # Wrap the text to fit within the maximum line width
-    wrapped_text = textwrap.fill(quote, width=(max_text_width // font_size) * 2.2) #(max_text_width // font_size) * 2)
+    #wrapped_text = textwrap.fill(quote, width=(max_text_width // font_size) * 2.2) #(max_text_width // font_size) * 2)
     
     # Split the wrapped text into multiple lines
-    lines = wrapped_text.split('\n')
+    #lines = wrapped_text.split('\n')
+    
+
+    # Split text into lines
+    lines = quote.split('\n')
+    
+    # Wrap each line individually
+    wrapped_lines = [textwrap.fill(line,width=(max_text_width // font_size) * 2.2) for line in lines]
+
+    # Join wrapped lines back into a single string
+    wrapped_text = '\n'.join(wrapped_lines)
     
     # Calculate total text height
-    total_text_height = sum(textsize(line, font=font)[1] for line in lines)
+    total_text_height = sum(textsize(line, font=font)[1] for line in wrapped_lines)    
     
     # Calculate text position
     x = (background_image.width - max_text_width) / 2
     y = (background_image.height - total_text_height) / 7
 
      # Calculate the size of the transparent text box
-    box_width = max_text_width + 2 * margin
-    box_height = total_text_height + 4 * margin
+    box_width = max_text_width - 2 * margin # + 2 * margin Before = full width
+    box_height = total_text_height + 2 * margin
     
     # Calculate the coordinates of the transparent text box
     box_x1 = x - margin
@@ -202,19 +212,23 @@ def add_text_with_shadow_box(image_path, quote, author, font_size=30, text_color
     
     # Blur the transparent rectangle
     blurred_rect = rect_image.filter(ImageFilter.BLUR)
+    blurred_rect = rect_image.filter(ImageFilter.DETAIL)
     
     # Paste the blurred transparent rectangle onto the background image
     background_image.paste(blurred_rect, (0, 0), blurred_rect)
     
     
     # Draw the text with black color (shadow) and white color
-    for line in lines:
+    #for line in lines:
         #shadow_position = (x + shadow_offset[0], y + shadow_offset[1])
         #draw.text(shadow_position, line, fill=shadow_color, font=font)
-        draw.text((x, y), line, fill=text_color, font=font)
-        y += textsize(line, font=font)[1]  # Move to the next line
+     #   draw.text((x, y), line, fill=text_color, font=font)
+     #   y += textsize(line, font=font)[1]  # Move to the next line
     
-    draw.text((x, y), author, fill=text_color, font=font)
+    draw.text((x + margin, y), wrapped_text, fill=text_color, font=font)
+    #print(wrapped_text)
+    
+    #draw.text((x, y), author, fill=text_color, font=font)
 
      # Blur the text overlay
     #blurred_text_overlay = background_image.filter(ImageFilter.BLUR)
@@ -238,79 +252,27 @@ def read_text_from_file(file_path, encodings=['utf-8', 'iso-8859-9', 'latin-1', 
     for encoding in encodings:
         try:
             with open(file_path, 'r', encoding=encoding) as file:
-                quote = file.readline()
-                author = file.readline()
-            return quote, author
+                quote = file.read()
+                #author = file.readline()
+            return quote
         except UnicodeDecodeError:
             continue
     raise ValueError("Unable to decode the file using any of the specified encodings.")
 
 
-
-def add_text_with_shadowBlurred(image_path, quote, author, font_size=30, text_color=(255, 255, 255), shadow_color=(0, 0, 0), shadow_offset=(2, 2), margin=50, max_line_width=500):
-    # Open the image
-    background_image = Image.open(image_path)
-    
-    # Create a drawing object
-    #draw = ImageDraw.Draw(background_image)
-    # Create a blank image with transparent background
-    text_overlay = Image.new("RGBA", background_image.size, (255, 255, 255, 0))
-    draw = ImageDraw.Draw(text_overlay)
-    
-    # Load a font
-    font = ImageFont.load_default()  # You can also load a specific font using ImageFont.truetype()
-    
-    # Calculate text size and position
-    #font = ImageFont.truetype("arial.ttf", font_size)
-    #font = ImageFont.truetype("pala.ttf", font_size)
-    font = ImageFont.truetype("calibri.ttf", font_size)
-    #max_text_width = min(max_line_width, image.width - 2 * margin)
-    max_text_width = background_image.width - 2 * margin
-    
-    
-    # Wrap the text to fit within the maximum line width
-    wrapped_text = textwrap.fill(quote, width=(max_text_width // font_size) * 2.2) #(max_text_width // font_size) * 2)
-    
-    # Split the wrapped text into multiple lines
-    lines = wrapped_text.split('\n')
-    
-    # Calculate total text height
-    total_text_height = sum(textsize(line, font=font)[1] for line in lines)
-    
-    # Calculate text position
-    x = (background_image.width - max_text_width) / 2
-    y = (background_image.height - total_text_height) / 7
-    
-    # Draw the text with black color (shadow) and white color
-    for line in lines:
-        shadow_position = (x + shadow_offset[0], y + shadow_offset[1])
-        draw.text(shadow_position, line, fill=shadow_color, font=font)
-        draw.text((x, y), line, fill=text_color, font=font)
-        y += textsize(line, font=font)[1]  # Move to the next line
-    
-    draw.text((x, y), author, fill=text_color, font=font)
-
-    # Blur the text overlay
-    blurred_text_overlay = text_overlay.filter(ImageFilter.BLUR)
-    
-
-    # Paste the blurred text overlay onto the background image
-    #blurred_background = Image.alpha_composite(background_image, blurred_text_overlay)
-    # Paste the blurred text overlay onto the background image
-    blurred_background = Image.alpha_composite(background_image.convert("RGBA"), blurred_text_overlay.convert("RGBA"))
-
-
-    
-    background_image.save(file_path_text)
-    print("Image saved to " + file_path_text)
-
+ 
 content_file_path = "content.txt"
-quote, author = read_text_from_file(content_file_path)
+quote  = read_text_from_file(content_file_path)
 print(quote)
-add_text_with_shadow_box(file_path, quote, author, font_size=88, text_color=(255, 255, 255), shadow_color=(0, 0, 0), shadow_offset=(3, 3), margin=33)
+
+font_size=83
+
+add_text_with_shadow_box(file_path, quote, font_size=font_size, text_color=(255, 255, 255), shadow_color=(0, 0, 0), shadow_offset=(3, 3), margin=33)
 #add_text_with_shadow_box(file_path, quote, author, font_size=88, text_color=(255, 255, 255), shadow_color=(255, 255, 255), shadow_offset=(0, 0), margin=33)
 #add_text_with_shadow_box(file_path, quote, author, font_size=88, text_color=(0, 0, 0), shadow_color=(255, 255, 255), shadow_offset=(3, 3), margin=33)
 #add_text_with_shadow_box(file_path, quote, author, font_size=88, text_color=(0, 0, 128), shadow_color=(255, 255, 255), shadow_offset=(3, 3), margin=33)
 #orange white
-add_text_with_shadow_box(file_path, quote, author, font_size=88, text_color=(255, 165, 0), shadow_color=(0, 0, 0), shadow_offset=(3, 3), margin=33)
+add_text_with_shadow_box(file_path, quote, font_size=font_size, text_color=(255, 165, 0), shadow_color=(0, 0, 0), shadow_offset=(3, 3), margin=33)
 
+#Green white
+add_text_with_shadow_box(file_path, quote, font_size=font_size, text_color=(32, 212, 185), shadow_color=(0, 0, 0), shadow_offset=(3, 3), margin=33)
